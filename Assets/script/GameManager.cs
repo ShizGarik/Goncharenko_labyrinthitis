@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement; //Управление сценами. Уровень будет перезапущ
 
 public class GameManager : MonoBehaviour
 {
-   public PlayerMuvement movement; //Название скрипта объекта
+   public PlayerMovement movement; //Название скрипта объекта
    public float levelRestartDelay = 2F; //Через сколько секунд перезапуск уровня после столкновения
 
     public void EndGame() //Медот

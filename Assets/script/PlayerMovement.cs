@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMuvement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private GameObject Player; //Переменная игрового объекта Player
     public GameManager gm;
@@ -17,20 +19,20 @@ public class PlayerMuvement : MonoBehaviour
             Debug.Log("Проиграл"); //Вывод в консоле
         }
     }
-    void Start()
+    private void Start()
     {
         Player = (GameObject)this.gameObject; //Без использования тегов могу Присвоить этот скрипт к любому объекту
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKey(KeyCode.W))//Назначение клавиши для движения вперед. GetKeyDown - надо постоянно наживать на кнопку
         {
-            Player.transform.position -= Player.transform.forward * Speed * Time.deltaTime; // Задаю позицию объекта по оси (x, y, z) -= Движение * заданная скорость * частота кадров в секунду
+            Player.transform.position += Player.transform.forward * Speed * Time.deltaTime; // Задаю позицию объекта по оси (x, y, z) -= Движение * заданная скорость * частота кадров в секунду
         }
         if (Input.GetKey(KeyCode.S))//Назначение клавиши для движения назад
         {
-            Player.transform.position += Player.transform.forward * Speed * Time.deltaTime;
+            Player.transform.position -= Player.transform.forward * Speed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.A)) //Поворот объекта на лево
         {
@@ -44,6 +46,5 @@ public class PlayerMuvement : MonoBehaviour
         {
             Player.transform.position += Player.transform.up * Jump * Time.deltaTime;
         }
-
     }
 }
