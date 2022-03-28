@@ -2,49 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace Quest
 {
-    private GameObject Player; //Переменная игрового объекта Player
-    public GameManager gm;
-
-    public float Speed = 5; //Скорость объекта
-    public float SpeedRotation = 1; //Скорость поворота объекта
-    public float Jump = 6; //Сила прыжка
-
-    void OnCollisionEnter(Collision collision) //Принимает параметр: Столкновение которое произошло
+    public class PlayerMovement : MonoBehaviour
     {
-        if (collision.collider.tag == "Obstacle") //С чем произошло столкновение
-        {
-            gm.EndGame(); //Вызов метода
-            Debug.Log("Проиграл"); //Вывод в консоле
-        }
-    }
-    private void Start()
-    {
-        Player = (GameObject)this.gameObject; //Без использования тегов могу Присвоить этот скрипт к любому объекту
-    }
+        private Vector3 direction;
+        private bool isRunning;
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.W))//Назначение клавиши для движения вперед. GetKeyDown - надо постоянно наживать на кнопку
+        [SerializeField] private float speed = 5; //Скорость объекта
+        [SerializeField] private float runSpeed = 10; //Скорость объекта
+        [SerializeField] private float jump = 6; //Сила прыжка
+
+        private string horizontal = "Horizontal";
+        private string vertical = "Vertical";
+        private string Jump = "Jump";
+        private string run = "Run";
+
+        private void Update()
         {
-            Player.transform.position += Player.transform.forward * Speed * Time.deltaTime; // Задаю позицию объекта по оси (x, y, z) -= Движение * заданная скорость * частота кадров в секунду
+            direction.x = Input.GetAxis(horizontal);
+            direction.z = Input.GetAxis(vertical);
+            direction.y = Input.GetAxis(Jump);
+            isRunning = Input.GetButton(run);
         }
-        if (Input.GetKey(KeyCode.S))//Назначение клавиши для движения назад
+
+        private void FixedUpdate()
         {
-            Player.transform.position -= Player.transform.forward * Speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.A)) //Поворот объекта на лево
-        {
-            Player.transform.Rotate(Vector3.down * SpeedRotation); // Разворот объекта по оси (x, y, z) (по трем координатам * скорость разворота)
-        }
-        if (Input.GetKey(KeyCode.D))//Поворот объекта на право 
-        {
-            Player.transform.Rotate(Vector3.up * SpeedRotation);
-        }
-        if (Input.GetKey(KeyCode.Space)) //Назначение кнопки для прыжка
-        {
-            Player.transform.position += Player.transform.up * Jump * Time.deltaTime;
+            //позиция объекта + направление * (если бежит ? использую runSpeed : если нет то Speed ) * прыжок
+            transform.position += direction.normalized * (isRunning ? runSpeed : speed) * jump * Time.fixedDeltaTime;
         }
     }
 }
